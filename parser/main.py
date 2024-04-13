@@ -5,7 +5,11 @@ with sync_playwright() as p:
     page = browser.new_page()
     page.goto("https://halykbank.kz/halykclub")
 
-    buttons = page.query_selector_all('.mb-3.flex.items-center.cursor-pointer.justify-between')
+    dropdowns = page.query_selector_all('.mb-3.cursor-pointer')
+    for dropdown in dropdowns :
+        dropdown.click()
+
+    buttons = page.query_selector_all('.flex.cursor-pointer.justify-between.font-medium')
 
     for button in buttons :
         button.click()
