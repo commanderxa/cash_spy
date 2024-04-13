@@ -13,26 +13,22 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 
 from core.api.dep import get_current_user, get_db
-import core.schemes.card as s_card
-import core.security.token as token
-import core.schemes.token as token_scheme
+import core.schemes.bank as s_bank
 from core.services.bank import get_banks
-import core.models.user as m_user
 
 router = APIRouter(tags=["monitor"])
 
 
-@router.get("/", response_model=list[s_card.Card])
+@router.get("/", response_model=list[s_bank.BankResp])
 async def get_all_banks(
-    active_user: m_user.User = Depends(get_current_user),
     session: Session = Depends(get_db),
 ):
     _banks = get_banks(session)
-    banks: list[s_card.Card] = []
+    banks: list[s_bank.Bank] = []
     if _banks:
         for c in _banks:
             banks.append(
-                s_card.Card(id=c.id, name=c.name, user_id=c.user_id, bank_id=c.bank_id)
+                s_bank.BankResp(id=c.id, name=c.name)
             )
     return banks
 

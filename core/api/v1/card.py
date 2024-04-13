@@ -4,7 +4,7 @@ import os
 from datetime import timedelta, timezone
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, status, HTTPException
+from fastapi import APIRouter, Depends, Request, Response, status, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -16,47 +16,49 @@ from core.api.dep import get_current_user, get_db
 import core.schemes.card as s_card
 import core.security.token as token
 import core.schemes.token as token_scheme
-from core.services.card import get_cards_by_user_id, add_card
+from core.services.card import add_card, get_cards_by_bank, get_cards_by_user
 import core.models.user as m_user
 
 router = APIRouter(tags=["monitor"])
 
 
-@router.get("/", response_model=list[s_card.Card])
-async def get_cards(
-    active_user: m_user.User = Depends(get_current_user),
+@router.get("/", response_model=list[s_card.CardResp])
+async def get_all_cards_by_bank(
+    bank_id: str,
     session: Session = Depends(get_db),
 ):
-    _cards = get_cards_by_user_id(session, active_user.id)
+    _cards = get_cards_by_bank(db=session, bank_id=bank_id)
     cards: list[s_card.Card] = []
     if _cards:
         for c in _cards:
-            cards.append(
-                s_card.Card(id=c.id, name=c.name, user_id=c.user_id, bank_id=c.bank_id)
-            )
+            cards.append(s_card.CardResp(id=c.id, name=c.name, bank_id=c.bank_id))
     return cards
 
 
-# @router.post("/add")
-# async def register(
-#     form_data: s_card.Card,
-#     session: Session = Depends(get_db),
-# ) -> token_scheme.Token:
-#     user = get_user_by_username(session, form_data.username)
-#     if user:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Username is taken"
-#         )
-#     create_user(
-#         session, UserInDB(username=form_data.username, password=form_data.password)
-#     )
-#     user = get_user_by_username(session, form_data.username)
-#     if not user:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED, detail="Error requesting token"
-#         )
-#     access_token_expires = timedelta(minutes=token.ACCESS_TOKEN_EXPIRE_MINUTES)
-#     access_token = create_access_token(
-#         data={"sub": user.username}, expires_delta=access_token_expires
-#     )
-#     return token_scheme.Token(access_token=access_token, token_type="bearer")
+@router.get("/my", response_model=list[s_card.UserCard])
+async def get_my_cards(
+    user = Depends(get_current_user),
+    session: Session = Depends(get_db),
+):
+    _cards = get_cards_by_user(db=session, user_id=user.id)
+    cards: list[s_card.UserCard] = []
+    if _cards:
+        for c in _cards:
+            print(c.card.name)
+            cards.append(s_card.UserCard(user_id=c.user_id, card_id=c.card_id, bank=c.card.bank.name, card=c.card.name))
+    return cards
+
+
+@router.post("/add")
+async def create_card(
+    card: s_card.UserCardCreate,
+    user: m_user.User = Depends(get_current_user),
+    session: Session = Depends(get_db),
+) -> token_scheme.Token:
+    card = add_card(session, card.card_id, user.id)
+    if not card:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error requesting card insertion",
+        )
+    return Response(status_code=201)

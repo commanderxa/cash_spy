@@ -50,10 +50,6 @@ export default function TabsBottomNavExample() {
   };
 
   const handleRegister = async () => {
-    if (password !== repeatPassword) {
-      alert("Passwords don't match");
-      return;
-    }
     try {
       const response = await axios.post(`${apiUrl}/register`, {
         username: username,
@@ -61,6 +57,8 @@ export default function TabsBottomNavExample() {
       });
       localStorage.setItem("token", response.data.access_token);
       console.log("Registration successful", response.data);
+
+      window.location.reload();
     } catch (error) {
       alert("Registration failed: " + error.response.data.detail);
     }

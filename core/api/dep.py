@@ -54,15 +54,13 @@ def get_current_user(
 
     try:
         payload = jwt.decode(token=token, key=security_token.SECRET_KEY, algorithms=security_token.ALGORITHM)
-        print(payload)
         token_data = s_token.TokenPayload(**payload)
-        print(token_data)
     except (JWTError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = user_serv.get_user(session, user_id=token_data.sub)
+    user = user_serv.get_user(session, user_id=int(token_data.sub))
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
