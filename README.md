@@ -19,6 +19,7 @@ To install mandatory modeules:
 ```sh
 cd cashspy-client
 npm i
+npm i axios
 ```
 
 ## Run
