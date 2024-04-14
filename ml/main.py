@@ -45,29 +45,4 @@ for embedding in embeddings_no_stopwrods:
     matched_class, similarity_value = calculate_similarities(class_tokens=CLASS_TOKENS, embedding=embedding)
     print(f"Input: {embedding.text}, Class: {CLASS_KEYWORDS[matched_class]}\nSim_value:{similarity_value}\n")
 
-
-
-''' Version for only one word'''
-
-'''
-def calculate_similarities(class_tokens, token):
-    similarities = [class_token.similarity(token) for class_token in class_tokens]
-    best_match_index = np.argmax(similarities)
-    return best_match_index
-    
-
-print("Enter two space-separated words") 
-words = input() 
-
-tokens = nlp(words) 
-
-for token in tokens: 
-    #print(token.text, token.has_vector, token.vector_norm, token.is_oov)
-    matched_class = calculate_similarities(class_tokens=CLASS_TOKENS, token=token)
-    print(f"{token.text}: {CLASS_KEYWORDS[matched_class]}")
-
-'''
-    
-	
-
  
