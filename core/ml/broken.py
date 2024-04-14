@@ -1,7 +1,6 @@
 import spacy
-import numpy as np
-
 from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 # Load spaCy model
 nlp = spacy.load("en_core_web_sm")

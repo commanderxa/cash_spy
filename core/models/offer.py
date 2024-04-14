@@ -10,7 +10,7 @@ class Offer(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, index=True)
 
-    category_id = Column(Integer, ForeignKey("categories.id"))
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     card_id = Column(Integer, ForeignKey("cards.id"), nullable=True)
     partner_id = Column(Integer, ForeignKey("partners.id"), nullable=True)
 

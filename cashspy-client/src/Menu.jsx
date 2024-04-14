@@ -12,6 +12,7 @@ import { Stack } from "@mui/material";
 import Button from "@mui/joy/Button";
 import FloatingLabelInput from "./input";
 import MyCards from "./MyCards";
+import SearchTab from "./Search";
 
 export default function TabsBottomNavExample() {
   const [index, setIndex] = React.useState(0);
@@ -107,30 +108,7 @@ export default function TabsBottomNavExample() {
         <MyCards />
       )}
       {index === 1 && (
-        <Box
-          component="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearch();
-          }}
-          sx={{ width: "100%", mt: 4 }}
-        >
-          <Stack sx={{ gap: 2 }}>
-            <FloatingLabelInput
-              label="Предмет"
-              placeholder="Ноутбук"
-              onChange={(e) => setItem(e.target.value)}
-            />
-            <FloatingLabelInput
-              label="Место"
-              placeholder="Технодом"
-              onChange={(e) => setPlace(e.target.value)}
-            />
-            <Button type="submit" sx={{ marginTop: 2, p: 2 }}>
-              Search
-            </Button>
-          </Stack>
-        </Box>
+        <SearchTab />
       )}
     </Box>
   );

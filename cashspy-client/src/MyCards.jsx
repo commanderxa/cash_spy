@@ -72,7 +72,7 @@ export default function MyCards() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCards(response.data);
-      console.log(response.data)
+      console.log(response.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -130,12 +130,15 @@ export default function MyCards() {
       )}
 
       <Box sx={{ width: "100%", mt: 4 }}>
-        <Stack sx={{ gap: 2 }}>
+        <Stack sx={{ gap: 2, width: "100%" }}>
           {error && <div>Error: {error}</div>}
           {cards.map((card) => (
-            <div key={card.card_id}>
+            <Box
+              key={card.card_id}
+              sx={{ p: 4, backgroundColor: "#f2f3f3", borderRadius: "12px" }}
+            >
               {card.card}
-            </div>
+            </Box>
           ))}
           <Button
             sx={{

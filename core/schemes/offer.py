@@ -10,7 +10,7 @@ class CategoryBase(BaseModel):
 class OfferBase(BaseModel):
     id: int
     name: str
-    category_id: int
+    category_id: Optional[int] = None
     card_id: Optional[int] = None
     partner_id: Optional[int] = None
     description: Optional[str] = None
@@ -22,7 +22,7 @@ class OfferBase(BaseModel):
 
 class OfferCreate(BaseModel):
     name: str
-    category_id: int
+    category_id: Optional[int] = None
     card_id: Optional[int] = None
     partner_id: Optional[int] = None
     description: Optional[str] = None
@@ -33,4 +33,8 @@ class OfferCreate(BaseModel):
     date_to: Optional[datetime] = None
 
 class Offer(OfferBase):
-    category: CategoryBase
+    category: Optional[CategoryBase] = None
+
+class OfferRequest(BaseModel):
+    item: str
+    place: str
