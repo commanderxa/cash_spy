@@ -103,10 +103,9 @@ def generate_offers():
                     cashback = float(cashback.split("%")[0])
                 except:
                     cashback = 0
-                print(item_to_category(name.text_content().lower()))
                 yield (
                     name.text_content(),
-                    CLASS_KEYWORDS.index(item_to_category(name.text_content().lower())),
+                    None,
                     4,
                     name.text_content(),
                     condition,

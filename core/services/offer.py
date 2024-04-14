@@ -20,7 +20,7 @@ def get_offers_by_place(db: Session, place: str):
 def get_offers_by_category(db: Session, category: str, user_id: int):
     _category = (
         db.query(m_category.Category)
-        .filter(m_category.Category.name == category)
+        .filter(m_category.Category.name.ilike(f"%{category}%"))
         .first()
     )
     offers = (
@@ -50,6 +50,7 @@ def get_offers_by_bank_cards(user_id: int, db: Session):
         )  # Join cards to user_cards
         .filter(m_card.UserCard.user_id == user_id)  # Filter for this specific user
         .filter(m_offer.Offer.category_id == None)  # Filter by category
+        .filter(m_offer.Offer.partner == None)  # Filter by category
         .order_by(m_offer.Offer.cashback.desc())  # Order by cashback descending
         .all()
     )

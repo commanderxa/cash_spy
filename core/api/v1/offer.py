@@ -59,11 +59,11 @@ async def get_offers(
         _offers = get_offers_by_place(place=place, db=session)
         for offer in _offers:
             _card = get_card(session, offer.card_id)
+            card_name = None
+            bank_name = None
             if _card:
                 card_name = _card.name
                 bank_name = get_bank(session, _card.bank_id).name
-            else:
-                bank_name = get_bank()
             offers.append(
                 s_offer.OfferBase(
                     id=offer.id,
@@ -86,9 +86,14 @@ async def get_offers(
         offers_cat = get_offers_by_category(
             category=item_to_category(item), user_id=user.id, db=session
         )
-        print(offers_cat)
         if offers_cat:
             for c in offers_cat:
+                _card = get_card(session, c.card_id)
+                card_name = None
+                bank_name = None
+                if _card:
+                    card_name = _card.name
+                    bank_name = get_bank(session, _card.bank_id).name
                 offers.append(
                     s_offer.Offer(
                         id=c.id,
@@ -96,6 +101,8 @@ async def get_offers(
                         category_id=c.category_id,
                         card_id=c.card_id,
                         partner=c.partner,
+                        card=card_name,
+                        bank=bank_name,
                         description=c.description,
                         condition=c.condition,
                         cashback=c.cashback,
@@ -109,6 +116,12 @@ async def get_offers(
     offers_gen = get_offers_by_bank_cards(user_id=user.id, db=session)
     if offers_gen:
         for c in offers_gen:
+            _card = get_card(session, c.card_id)
+            card_name = None
+            bank_name = None
+            if _card:
+                card_name = _card.name
+                bank_name = get_bank(session, _card.bank_id).name
             offers.append(
                 s_offer.Offer(
                     id=c.id,
@@ -118,6 +131,8 @@ async def get_offers(
                     partner=c.partner,
                     description=c.description,
                     condition=c.condition,
+                    card=card_name,
+                    bank=bank_name,
                     cashback=c.cashback,
                     favorite_cashback=c.favorite_cashback,
                     date_from=c.date_from,

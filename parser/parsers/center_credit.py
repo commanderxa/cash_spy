@@ -118,7 +118,7 @@ def generate_offers():
         if name == "#TravelCard" :
             yield (name, 9, card_id, None, None, float(cash), None)
         else :
-            yield (name, 9, card_id, None, None, float(cash), None)
+            yield (name, None, card_id, None, None, float(cash), None)
         card_id += 1
 
     #''' Part to get partners for card type(3)'''

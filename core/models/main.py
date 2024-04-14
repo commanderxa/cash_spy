@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from core.models.card import Card
+from core.models.offer import Offer
 from core.models.bank import Bank
 from core.models.category import Category
 from core.database import SessionLocal, engine
@@ -20,6 +21,7 @@ def fill_tables():
     fill_categories(db)
     fill_banks(db)
     fill_cards(db)
+    fill_offers(db)
 
 
 def fill_categories(db: Session):
@@ -85,5 +87,26 @@ def fill_cards(db: Session):
         db_card = db.query(Card).filter(Card.name == card.name).first()
         if not db_card:
             db.add(card)
+
+    db.commit()
+
+
+def fill_offers(db: Session):
+    offer_data = [
+        Offer(
+            name="Halyk QR Bonus",
+            category_id=None,
+            card_id=4,
+            partner=None,
+            condition="QR payment",
+            cashback=1,
+        ),
+    ]
+
+    for offer in offer_data:
+        # Check if card already exists to avoid duplicates
+        db_card = db.query(Offer).filter(Offer.name == offer.name).first()
+        if not db_card:
+            db.add(offer)
 
     db.commit()
