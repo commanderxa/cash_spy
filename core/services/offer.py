@@ -13,13 +13,9 @@ from ..schemes import offer as s_offer
 
 
 def get_offers_by_place(db: Session, place: str):
-    banks = db.query(m_bank.Bank).filter(m_bank.Bank.name.ilike(place)).all()
-    partner = (
-        db.query(m_partner.Partner).filter(m_partner.Partner.name.ilike(place)).first()
-    )
     return (
         db.query(m_offer.Offer)
-        .filter(m_offer.Offer.partner_id == partner.id)
+        .filter(m_offer.Offer.partner.ilike(place))
         .order_by(m_offer.Offer.cashback.desc())
         .all()
     )
@@ -69,7 +65,7 @@ def add_offer(db: Session, offer: s_offer.OfferCreate):
         name=offer.name,
         category_id=offer.category_id,
         card_id=offer.card_id,
-        partner_id=offer.partner_id,
+        partner=offer.partner,
         description=offer.description,
         condition=offer.condition,
         cashback=offer.cashback,

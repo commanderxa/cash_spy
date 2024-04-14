@@ -4,13 +4,12 @@ from core.models.card import Card
 from core.models.bank import Bank
 from core.models.category import Category
 from core.database import SessionLocal, engine
-from . import bank, category, offer, partner, user, card
+from . import bank, category, offer, user, card
 
 
 def create_tables():
     user.Base.metadata.create_all(bind=engine)
     bank.Base.metadata.create_all(bind=engine)
-    partner.Base.metadata.create_all(bind=engine)
     category.Base.metadata.create_all(bind=engine)
     card.Base.metadata.create_all(bind=engine)
     offer.Base.metadata.create_all(bind=engine)

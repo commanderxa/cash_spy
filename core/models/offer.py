@@ -12,7 +12,7 @@ class Offer(Base):
 
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     card_id = Column(Integer, ForeignKey("cards.id"), nullable=True)
-    partner_id = Column(Integer, ForeignKey("partners.id"), nullable=True)
+    partner = Column(String, nullable=True)
 
     description = Column(String, nullable=True)
     condition = Column(String, nullable=True)

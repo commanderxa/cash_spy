@@ -41,7 +41,11 @@ def generate_offers():
 
 #                print(name.text_content() + ": " + cashback)
 
-                yield (name.text_content(), None, None, name.text_content(), condition, cashback, None)
+                try:
+                    cashback = float(cashback.split("%")[0])
+                except:
+                    cashback = 0
+                yield (name.text_content(), None, None, name.text_content(), condition, float(cashback), None)
 
         #========= Акции =========================
 
@@ -77,6 +81,6 @@ def generate_offers():
 
 #            print(text[0] + company_name)
 
-            yield (company_name, None, None, company_name, None, text[0], None)
+            yield (company_name, None, None, company_name, None, float(text[0].split("%")[0]), None)
 
         browser.close()
