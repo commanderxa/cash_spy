@@ -2,10 +2,25 @@ import spacy
 import numpy as np
 
 
-nlp = spacy.load('en_core_web_md') 
-CLASS_KEYWORDS = ['electronics', 'car', 'food']
-CLASS_TOKENS = nlp(' '.join(CLASS_KEYWORDS))
-
+nlp = spacy.load('ru_core_news_lg')
+CLASS_KEYWORDS = ['Игровые сервисы',
+                'Салоны красоты и косметики',
+                'Одежда и обувь',
+                'Мебель',
+                'Медицинские услуги',
+                'Кафе и рестораны',
+                'Такси',
+                'Онлайн кино и музыка',
+                'Путешествия',
+                'Фитнес и SPA',
+                'Супермаркеты',
+                'Образование',
+                'Доставка еды',
+                'Питомцы',
+                'Товары для детей'
+]
+CLASS_TOKENS = [nlp(keyword.lower()) for keyword in CLASS_KEYWORDS]
+CLASS_TOKENS = [nlp(' '.join([str(t) for t in embedding if not t.is_stop])) for embedding in CLASS_TOKENS]
 
 ''' Version for word or sentence'''
 
@@ -19,7 +34,10 @@ inputs = input()
 inputs = inputs.split(',')
 
 embeddings = [nlp(inp) for inp in inputs]
+print(embeddings)
 embeddings_no_stopwrods = [nlp(' '.join([str(t) for t in embedding if not t.is_stop])) for embedding in embeddings]
+print(embeddings_no_stopwrods)
+
 
 #print(search_doc_no_stop_words.similarity(main_doc_no_stop_words))
 
