@@ -12,6 +12,10 @@ def get_cards_by_user(db: Session, user_id: int):
     return db.query(m_card.UserCard).filter(m_card.UserCard.user_id == user_id).all()
 
 
+def get_card(db: Session, id: int):
+    return db.query(m_card.Card).filter(m_card.Card.id == id).first()
+
+
 def add_card(db: Session, card_id: int, user_id: int):
     db_card = m_card.UserCard(user_id=user_id, card_id=card_id)
     db.add(db_card)

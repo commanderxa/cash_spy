@@ -8,14 +8,10 @@ from ..models import offer as m_offer
 from ..schemes import offer as s_offer
 
 
-# def get_user(db: Session, user_id: int):
-#     return db.query(m_user.User).filter(m_user.User.id == user_id).first()
-
-
 def get_offers_by_place(db: Session, place: str):
     return (
         db.query(m_offer.Offer)
-        .filter(m_offer.Offer.partner.ilike(place))
+        .filter(m_offer.Offer.partner.ilike(f"%{place}%"))
         .order_by(m_offer.Offer.cashback.desc())
         .all()
     )

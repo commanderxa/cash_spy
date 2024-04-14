@@ -30,19 +30,13 @@ def calculate_similarities(class_tokens, embedding):
     return best_match_index, similarities[best_match_index]
 
 print("Enter space-separated words or commas") 
-inputs = input() 
-inputs = inputs.split(',')
+input = "тимур"
 
-embeddings = [nlp(inp) for inp in inputs]
-print(embeddings)
-embeddings_no_stopwrods = [nlp(' '.join([str(t) for t in embedding if not t.is_stop])) for embedding in embeddings]
+embedding = nlp(input)
+print(embedding)
+embeddings_no_stopwrods = nlp(' '.join([str(t) for t in embedding if not t.is_stop]))
 print(embeddings_no_stopwrods)
 
 
-#print(search_doc_no_stop_words.similarity(main_doc_no_stop_words))
-
-for embedding in embeddings_no_stopwrods:
-    matched_class, similarity_value = calculate_similarities(class_tokens=CLASS_TOKENS, embedding=embedding)
-    print(f"Input: {embedding.text}, Class: {CLASS_KEYWORDS[matched_class]}\nSim_value:{similarity_value}\n")
-
- 
+matched_class, similarity_value = calculate_similarities(class_tokens=CLASS_TOKENS, embedding=embeddings_no_stopwrods)
+print(f"Input: {embedding.text}, Class: {CLASS_KEYWORDS[matched_class]}\nSim_value:{similarity_value}\n")

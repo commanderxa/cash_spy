@@ -12,6 +12,8 @@ class OfferBase(BaseModel):
     name: str
     category_id: Optional[int] = None
     card_id: Optional[int] = None
+    card: Optional[str] = None
+    bank: Optional[str] = None
     partner: Optional[str] = None
     description: Optional[str] = None
     condition: Optional[str] = None

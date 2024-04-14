@@ -18,6 +18,8 @@ import core.schemes.card as s_card
 import core.security.token as token
 import core.schemes.token as token_scheme
 import core.models.user as m_user
+from core.services.bank import get_bank
+from core.services.card import get_card
 from core.services.offer import (
     add_offer,
     get_offers_by_bank_cards,
@@ -55,24 +57,30 @@ async def get_offers(
     offers: list[s_offer.Offer] = []
     if place and len(place) > 0:
         _offers = get_offers_by_place(place=place, db=session)
-        if _offers:
-            for c in _offers:
-                offers.append(
-                    s_offer.Offer(
-                        id=c.id,
-                        name=c.name,
-                        category_id=c.category_id,
-                        card_id=c.card_id,
-                        partner=c.partner,
-                        description=c.description,
-                        condition=c.condition,
-                        cashback=c.cashback,
-                        favorite_cashback=c.favorite_cashback,
-                        date_from=c.date_from,
-                        date_to=c.date_to,
-                        category=None
-                    )
+        for offer in _offers:
+            _card = get_card(session, offer.card_id)
+            if _card:
+                card_name = _card.name
+                bank_name = get_bank(session, _card.bank_id).name
+            else:
+                bank_name = get_bank()
+            offers.append(
+                s_offer.OfferBase(
+                    id=offer.id,
+                    name=offer.name,
+                    category_id=offer.category_id,
+                    card_id=offer.card_id,
+                    card=card_name,
+                    bank=bank_name,
+                    partner=offer.partner,
+                    description=offer.description,
+                    condition=offer.condition,
+                    cashback=offer.cashback,
+                    favorite_cashback=offer.favorite_cashback,
+                    date_from=offer.date_from,
+                    date_to=offer.date_to,
                 )
+            )
 
     if item and len(item) > 0:
         offers_cat = get_offers_by_category(
@@ -94,7 +102,7 @@ async def get_offers(
                         favorite_cashback=c.favorite_cashback,
                         date_from=c.date_from,
                         date_to=c.date_to,
-                        category=None
+                        category=None,
                     )
                 )
 
@@ -114,7 +122,7 @@ async def get_offers(
                     favorite_cashback=c.favorite_cashback,
                     date_from=c.date_from,
                     date_to=c.date_to,
-                    category=None
+                    category=None,
                 )
             )
 

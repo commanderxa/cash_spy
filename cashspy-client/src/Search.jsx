@@ -83,14 +83,36 @@ export default function SearchTab() {
           <Stack sx={{ gap: 2 }}>
             {offers.map((offer) => (
               <Stack
-                key={offer.offer_id}
-                sx={{ p: 4, backgroundColor: "#f2f3f3", borderRadius: "12px" }}
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                key={offer.id}
+                sx={{
+                  p: 4,
+                  backgroundColor: "#f2f3f3",
+                  borderRadius: "12px",
+                }}
+                direction="column"
+                justifyContent="start"
               >
-                <b>{offer.name}</b>
-                {offer.cashback}%
+                <Stack
+                  sx={{
+                    gap: 2,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {offer.card}
+
+                  <b>{offer.bank}</b>
+                </Stack>
+                <Stack
+                  key={offer.id}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <b>{offer.name}</b>
+                  {offer.cashback}%
+                </Stack>
               </Stack>
             ))}
           </Stack>
